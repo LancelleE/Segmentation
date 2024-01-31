@@ -5,9 +5,9 @@ import pandas as pd
 class RawData:
     def __init__(self, dataset):
         self.data = dataset
-        self.data_standardized = pd.DataFrame()
-        self.data_hot_encoded = pd.DataFrame()
-        self.final_dataset = pd.DataFrame()
+        self.data_standardized = pd.DataFrame(dataset.select_dtypes(include=['int16', 'int32', 'int64', 'float16', 'float32', 'float64']))
+        self.data_hot_encoded = pd.DataFrame(dataset.select_dtypes(exclude=['int16', 'int32', 'int64', 'float16', 'float32', 'float64']))
+        self.final_dataset = pd.DataFrame(dataset)
 
 
     def standardize_numerical_values(self):
