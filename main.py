@@ -7,20 +7,16 @@ def perform_computation(df, choix_colonnes, toggle_standardise, toggle_hot_encod
     if not choix_colonnes:
         # If no features selected, return the original dataframe
         return df
-
     
-    # filtered_df = df.filter(choix_colonnes)
     data_object = RawData(df)
-    data_object.filter_data(choix_colonnes)
-
-    if id_column in data_object.data_filtered.columns:
-            data_object.data_filtered.set_index(id_column, inplace=True)
+    data_object.set_id_column(id_column)
+    data_object.filter_data()
 
     if toggle_standardise:
         data_object.standardize_numerical_values()
 
     if toggle_hot_encoding:
-        data_object.encode_qualitative(exclude_columns=[id_column])
+        data_object.encode_qualitative()
 
     # Check if neither standardization nor hot encoding is selected
     if not toggle_standardise and not toggle_hot_encoding:
@@ -29,10 +25,12 @@ def perform_computation(df, choix_colonnes, toggle_standardise, toggle_hot_encod
     data_object.merge_datasets()
 
     # Preserve the ID column as an index
-    if id_column in data_object.final_dataset.columns:
-            data_object.final_dataset.set_index(id_column, inplace=True)
-
+    if id_column and id_column in data_object.final_dataset.columns:
+        data_object.final_dataset.set_index(id_column, inplace=True)
+    print(data_object.final_dataset)
+    # Return the DataFrame with the index
     return data_object.final_dataset
+
 
 
 # Streamlit app
@@ -60,4 +58,9 @@ if uploaded_file:
         with st.spinner("Computing..."):
             final_dataset = perform_computation(df, choix_colonnes, toggle_standardise, toggle_hot_encoding, id_column)
             st.success("Computation complete!")
-            st.write(final_dataset)
+
+            # Display the DataFrame with the selected ID column as the index
+            st.dataframe(final_dataset)
+
+
+
