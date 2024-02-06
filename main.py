@@ -27,14 +27,14 @@ def perform_computation(df, choix_colonnes, toggle_standardise, toggle_hot_encod
     # Preserve the ID column as an index
     if id_column and id_column in data_object.final_dataset.columns:
         data_object.final_dataset.set_index(id_column, inplace=True)
-    print(data_object.final_dataset)
+    # print(data_object.final_dataset)
     # Return the DataFrame with the index
     return data_object.final_dataset
 
 
 
 # Streamlit app
-st.sidebar.title("Feature Analysis App")
+st.sidebar.title("Segmentation")
 
 uploaded_file = st.sidebar.file_uploader("Choose a file", type=['csv', 'txt'])
 
